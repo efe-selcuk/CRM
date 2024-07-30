@@ -5,7 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 
-load_dotenv()  # .env dosyasını yükle
+load_dotenv()
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -19,13 +19,14 @@ def create_app():
     jwt.init_app(app)
     limiter.init_app(app)
 
-    # Blueprint'leri ekle
+    # Blueprint'leri burada içe aktarın
     from app.routes.product_routes import product_bp
     from app.routes.customer_routes import customer_bp
     from app.routes.sales_routes import sales_bp
     from app.routes.opportunity_routes import opportunity_bp
     from app.routes.activity_routes import activity_bp
     from app.routes.auth_routes import auth_bp
+    from app.routes.admin_routes import admin_bp
 
     app.register_blueprint(product_bp)
     app.register_blueprint(customer_bp)
@@ -33,5 +34,6 @@ def create_app():
     app.register_blueprint(opportunity_bp)
     app.register_blueprint(activity_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
 
     return app
