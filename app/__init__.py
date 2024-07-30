@@ -27,6 +27,7 @@ def create_app():
     from app.routes.activity_routes import activity_bp
     from app.routes.auth_routes import auth_bp
     from app.routes.admin_routes import admin_bp
+    from app.routes.satis_tahmini_routes import satis_tahmini_bp  # Yeni blueprint
 
     app.register_blueprint(product_bp)
     app.register_blueprint(customer_bp)
@@ -35,5 +36,6 @@ def create_app():
     app.register_blueprint(activity_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(satis_tahmini_bp)  # Yeni blueprint'i ekleyin
 
     return app

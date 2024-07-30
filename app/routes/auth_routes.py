@@ -9,10 +9,14 @@ auth_bp = Blueprint('auth', __name__)
 @limiter.limit("5 per minute")  # Dakikada 5 istek limiti
 def register():
     data = request.get_json()
+
     isim = data.get('isim')
     email = data.get('email')
     sifre = data.get('sifre')
     rol = data.get('rol')
+
+    if not all([isim, email, sifre, rol]):
+        return jsonify({"message": "Missing required fields"}), 400
 
     if Personel.query.filter_by(email=email).first():
         return jsonify({"message": "Email already exists"}), 400
@@ -25,14 +29,20 @@ def register():
     new_personel.set_password(sifre)
     db.session.add(new_personel)
     db.session.commit()
+
     return jsonify({"message": "User registered successfully"}), 201
 
 @auth_bp.route('/login', methods=['POST'])
 @limiter.limit("10 per minute")  # Dakikada 10 istek limiti
 def login():
     data = request.get_json()
+
     email = data.get('email')
     sifre = data.get('sifre')
+
+    if not email or not sifre:
+        return jsonify({"message": "Missing email or password"}), 400
+
     personel = Personel.query.filter_by(email=email).first()
 
     if personel is None or not personel.check_password(sifre):

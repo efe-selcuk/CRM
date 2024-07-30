@@ -1,7 +1,9 @@
+import uuid
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from app import db
 
 class Musteri(db.Model):
     id = Column(String(8), primary_key=True)
@@ -15,7 +17,7 @@ class Musteri(db.Model):
 class Kategori(db.Model):
     id = Column(Integer, primary_key=True)
     ad = Column(String(50), unique=True, nullable=False)
-    urunler = relationship('Urun', back_populates='kategori', lazy=True)    
+    urunler = relationship('Urun', back_populates='kategori', lazy=True)
 
 class Urun(db.Model):
     id = Column(String(8), primary_key=True)
@@ -49,7 +51,7 @@ class Aktivite(db.Model):
     musteri = relationship('Musteri', backref=db.backref('aktiviteler', lazy=True))
 
 class Personel(db.Model):
-    id = Column(String(8), primary_key=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     isim = Column(String(100), nullable=False)
     email = Column(String(120), unique=True, nullable=False)
     sifre_hash = Column(String(128), nullable=False)
