@@ -5,7 +5,6 @@ from app.models import Musteri, Urun, Satis, Firsat, Aktivite
 
 fake = Faker('tr_TR')
 
-# Daha fazla ürün ve kategori
 product_names = [
     "iPhone 14 Pro Max", "Samsung Galaxy S23 Ultra", "MacBook Air M2", "Dell XPS 13", 
     "iPad Air 5", "Sony WH-1000XM5", "Canon EOS R6", "LG OLED65CX", 
@@ -91,7 +90,7 @@ def generate_opportunities(n):
         existing_ids = set()
         products = Urun.query.all()
         used_product_ids = set()
-        discounts = [25, 50, 70]  # İndirim oranları
+        discounts = [25, 50, 70]
 
         for _ in range(n):
             if len(products) == len(used_product_ids):
@@ -118,7 +117,7 @@ def generate_activities(n):
     with app.app_context():
         existing_ids = set()
         customers = Musteri.query.all()
-        opportunities = Firsat.query.all()  # Fırsatları almak için query
+        opportunities = Firsat.query.all()
         for _ in range(n):
             customer = random.choice(customers)
             activity_id = generate_simple_id(existing_ids)
@@ -128,7 +127,7 @@ def generate_activities(n):
                 musteri_id=customer.id,
                 tarih=fake.date_time_this_year(),
                 tur=random.choice(['Telefon Gorusemesi', 'E-posta']),
-                not_=f"{opportunity.urun.ad} urunu su an %{opportunity.indirim} indirimde! Firsati kacirmayin."  # Güncellenmiş not
+                not_=f"{opportunity.urun.ad} urunu su an %{opportunity.indirim} indirimde! Firsati kacirmayin."
             )
             db.session.add(activity)
         db.session.commit()

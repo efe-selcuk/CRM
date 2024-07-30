@@ -36,5 +36,5 @@ class Aktivite(db.Model):
     musteri_id = db.Column(db.String(8), db.ForeignKey('musteri.id'), nullable=False)
     tarih = db.Column(db.DateTime, nullable=False)
     tur = db.Column(db.String(50), nullable=False)
-    not_ = db.Column(db.Text, nullable=True)
-    musteri = db.relationship('Musteri', backref=db.backref('aktivite', lazy=True))
+    not_ = db.Column(db.Text, nullable=False)
+    musteri = db.relationship('Musteri', backref=db.backref('aktiviteler', lazy=True))
