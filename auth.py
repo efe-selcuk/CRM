@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from models import db, Kullanıcı, Müşteri, Ürün, Satış, Fırsat, Aktivite
+from models import db, Kullanıcı
 
 auth_bp = Blueprint('auth', __name__)
 limiter = Limiter(key_func=get_remote_address)
@@ -49,32 +49,3 @@ def login():
 @limiter.limit("10 per minute")
 def protected():
     return jsonify({"message": "Bu alana erişim yetkiniz var!"}), 200
-
-@auth_bp.route('/customers/segmentation', methods=['GET'])
-@jwt_required()
-def customer_segmentation():
-    customers = Müşteri.query.all()
-    segments = {
-        'High Value': [],
-        'Medium Value': [],
-        'Low Value': []
-    }
-    
-    for customer in customers:
-        if customer.sadakat_puanı > 800:
-            segments['High Value'].append(customer.isim)
-        elif customer.sadakat_puanı > 400:
-            segments['Medium Value'].append(customer.isim)
-        else:
-            segments['Low Value'].append(customer.isim)
-    
-    return jsonify(segments), 200
-
-@auth_bp.route('/sales/forecast', methods=['GET'])
-@jwt_required()
-def sales_forecast():
-    sales = Satış.query.all()
-    total_sales = sum(satış.toplam_tutar for satış in sales)
-    forecast = total_sales * 1.1  # Basit bir %10 artış tahmini
-    
-    return jsonify({'forecast': forecast}), 200

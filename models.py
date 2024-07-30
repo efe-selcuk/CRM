@@ -15,8 +15,8 @@ class Müşteri(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     telefon = db.Column(db.String(20))
     adres = db.Column(db.String(255))
-    alışveriş_sıklığı = db.Column(db.Integer)
-    sadakat_puanı = db.Column(db.Integer)
+    alışveriş_sıklığı = db.Column(db.Float)
+    sadakat_puanı = db.Column(db.Float)
 
 class Ürün(db.Model):
     id = db.Column(db.String(36), primary_key=True)
