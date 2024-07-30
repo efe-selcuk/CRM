@@ -1,11 +1,12 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from app import db
+from app import db, limiter
 from app.models import Personel
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['POST'])
+@limiter.limit("5 per minute")  # Dakikada 5 istek limiti
 def register():
     data = request.get_json()
     isim = data.get('isim')
@@ -27,6 +28,7 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 @auth_bp.route('/login', methods=['POST'])
+@limiter.limit("10 per minute")  # Dakikada 10 istek limiti
 def login():
     data = request.get_json()
     email = data.get('email')
@@ -41,6 +43,7 @@ def login():
 
 @auth_bp.route('/protected', methods=['GET'])
 @jwt_required()
+@limiter.limit("5 per minute")  # Dakikada 5 istek limiti
 def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
