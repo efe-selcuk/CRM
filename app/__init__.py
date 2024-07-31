@@ -37,14 +37,14 @@ def create_app():
     from app.routes.satis_tahmini_routes import satis_tahmini_bp
     from app.routes.email_routes import email_bp
 
-    app.register_blueprint(product_bp)
-    app.register_blueprint(customer_bp)
-    app.register_blueprint(sales_bp)
-    app.register_blueprint(opportunity_bp)
-    app.register_blueprint(activity_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(admin_bp)
-    app.register_blueprint(satis_tahmini_bp)
-    app.register_blueprint(email_bp)
+    app.register_blueprint(product_bp, url_prefix='/products')
+    app.register_blueprint(customer_bp, url_prefix='/customers')
+    app.register_blueprint(sales_bp, url_prefix='/sales')
+    app.register_blueprint(opportunity_bp, url_prefix='/opportunities')
+    app.register_blueprint(activity_bp, url_prefix='/activities')
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(satis_tahmini_bp, url_prefix='/sales-forecast')
+    app.register_blueprint(email_bp, url_prefix='/emails')
 
     return app

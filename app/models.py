@@ -14,6 +14,17 @@ class Musteri(db.Model):
     alisveris_sikligi = Column(Float, nullable=False)
     sadakat_puani = Column(Float, nullable=False)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'isim': self.isim,
+            'email': self.email,
+            'telefon': self.telefon,
+            'adres': self.adres,
+            'alisveris_sikligi': self.alisveris_sikligi,
+            'sadakat_puani': self.sadakat_puani
+        }
+
 class Kategori(db.Model):
     id = Column(Integer, primary_key=True)
     ad = Column(String(50), unique=True, nullable=False)
@@ -24,9 +35,18 @@ class Urun(db.Model):
     ad = Column(String(100), nullable=False)
     fiyat = Column(Float, nullable=False)
     stok_miktari = Column(Integer, nullable=False)
-    kategori_id = Column(Integer, ForeignKey('kategori.id'), nullable=False)  # Her ürün bir kategoriye ait
+    kategori_id = Column(Integer, ForeignKey('kategori.id'), nullable=False)
     kategori = relationship('Kategori', back_populates='urunler')
     firsat = relationship('Firsat', backref='urun', uselist=False, lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'ad': self.ad,
+            'fiyat': self.fiyat,
+            'stok_miktari': self.stok_miktari,
+            'kategori': self.kategori.ad if self.kategori else None
+        }
 
 class Satis(db.Model):
     id = Column(String(8), primary_key=True)
@@ -35,12 +55,29 @@ class Satis(db.Model):
     toplam_tutar = Column(Float, nullable=False)
     musteri = relationship('Musteri', backref=db.backref('satislar', lazy=True))
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'musteri_id': self.musteri_id,
+            'tarih': self.tarih.strftime('%Y-%m-%d %H:%M:%S'),
+            'toplam_tutar': self.toplam_tutar
+        }
+
 class Firsat(db.Model):
     id = Column(String(8), primary_key=True)
     urun_id = Column(String(8), ForeignKey('urun.id'), unique=True, nullable=False)
     indirim = Column(Integer, nullable=False)
     baslangic_tarihi = Column(DateTime, nullable=False)
     bitis_tarihi = Column(DateTime, nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'urun_id': self.urun_id,
+            'indirim': self.indirim,
+            'baslangic_tarihi': self.baslangic_tarihi.strftime('%Y-%m-%d'),
+            'bitis_tarihi': self.bitis_tarihi.strftime('%Y-%m-%d')
+        }
 
 class Aktivite(db.Model):
     id = Column(String(8), primary_key=True)
@@ -49,6 +86,15 @@ class Aktivite(db.Model):
     tur = Column(String(50), nullable=False)
     not_ = Column(String, nullable=False)
     musteri = relationship('Musteri', backref=db.backref('aktiviteler', lazy=True))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'musteri_id': self.musteri_id,
+            'tarih': self.tarih.strftime('%Y-%m-%d %H:%M:%S'),
+            'tur': self.tur,
+            'not': self.not_
+        }
 
 class Personel(db.Model):
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -62,3 +108,11 @@ class Personel(db.Model):
     
     def check_password(self, sifre):
         return check_password_hash(self.sifre_hash, sifre)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'isim': self.isim,
+            'email': self.email,
+            'rol': self.rol
+        }
