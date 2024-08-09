@@ -3,10 +3,8 @@ from app.models import Firsat
 from app import db
 from app.utils import apply_pagination, apply_sorting, apply_filters
 
-# Blueprint'i tanımlayın
 opportunity_bp = Blueprint('opportunities', __name__)
 
-# Tüm fırsatları getiren uç nokta
 @opportunity_bp.route('/', methods=['GET'])
 def get_opportunities():
     page = request.args.get('page', 1, type=int)
@@ -34,7 +32,6 @@ def get_opportunities():
         'per_page': per_page
     })
 
-# Belirli bir fırsatı getiren uç nokta
 @opportunity_bp.route('/<string:id>', methods=['GET'])
 def get_opportunity(id):
     opportunity = Firsat.query.get(id)

@@ -6,7 +6,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Environment variables yükleyin
 load_dotenv()
 
 db = SQLAlchemy()
@@ -14,14 +14,18 @@ jwt = JWTManager()
 limiter = Limiter(key_func=get_remote_address)
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        template_folder='../templates',  # templates klasörünün yolunu belirtin
+        static_folder='../static'  # static klasörünün yolunu belirtin
+    )
     
-    # Load configuration from environment variables
+    # Configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
-    # Initialize extensions
+    # Extensions
     db.init_app(app)
     jwt.init_app(app)
     limiter.init_app(app)
@@ -36,7 +40,7 @@ def create_app():
     from app.routes.admin_routes import admin_bp
     from app.routes.satis_tahmini_routes import satis_tahmini_bp
     from app.routes.email_routes import email_bp
-    from app.routes.hubspot_routes import hubspot_bp  # HubSpot blueprint'i ekleyin
+    from app.routes.main_routes import main_bp  # Anasayfa için ekleyin
 
     app.register_blueprint(product_bp, url_prefix='/products')
     app.register_blueprint(customer_bp, url_prefix='/customers')
@@ -47,6 +51,6 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(satis_tahmini_bp, url_prefix='/sales-forecast')
     app.register_blueprint(email_bp, url_prefix='/emails')
-    app.register_blueprint(hubspot_bp, url_prefix='/hubspot')  # HubSpot blueprint'i ekleyin
+    app.register_blueprint(main_bp)  # Anasayfa için blueprint'i kaydedin
 
     return app

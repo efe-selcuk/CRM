@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Giriş Yap</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Email girin" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="sifre">Şifre:</label>
+                <input type="password" class="form-control" id="sifre" placeholder="Şifre girin" name="sifre" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+        </form>
+        <a href="{{ url_for('auth.register') }}">Kayıt Ol</a> | <a href="{{ url_for('auth.reset_password') }}">Şifre Sıfırlama</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/login',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    email: $('#email').val(),
+                    sifre: $('#sifre').val()
+                }),
+                success: function(response) {
+                    alert('Giriş başarılı');
+                    // Yönlendirme veya başka bir işlem yapılabilir
+                },
+                error: function(response) {
+                    alert('Giriş hatası: ' + response.responseJSON.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

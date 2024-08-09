@@ -32,7 +32,7 @@ def get_products():
         'per_page': per_page
     })
 
-@product_bp.route('/products/<int:id>', methods=['GET'])
+@product_bp.route('/<int:id>', methods=['GET'])
 def get_product(id):
     product = Urun.query.get(id)
     if product:
@@ -46,7 +46,7 @@ def get_product(id):
     else:
         return jsonify({'message': 'Product not found'}), 404
 
-@product_bp.route('/products', methods=['POST'])
+@product_bp.route('/', methods=['POST'])
 def add_product():
     data = request.get_json()
     new_product = Urun(
@@ -59,7 +59,7 @@ def add_product():
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
 
-@product_bp.route('/products/<int:id>', methods=['PUT'])
+@product_bp.route('/<int:id>', methods=['PUT'])
 def update_product(id):
     data = request.get_json()
     product = Urun.query.get(id)
@@ -75,7 +75,7 @@ def update_product(id):
     else:
         return jsonify({'message': 'Product not found'}), 404
 
-@product_bp.route('/products/<int:id>', methods=['DELETE'])
+@product_bp.route('/<int:id>', methods=['DELETE'])
 def delete_product(id):
     product = Urun.query.get(id)
     if product:

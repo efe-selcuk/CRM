@@ -32,7 +32,7 @@ def get_activities():
         'per_page': per_page
     })
 
-@activity_bp.route('/activities/<string:id>', methods=['GET'])
+@activity_bp.route('/<string:id>', methods=['GET'])
 def get_activity(id):
     activity = Aktivite.query.get(id)
     if activity:
