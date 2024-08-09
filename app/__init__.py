@@ -36,6 +36,7 @@ def create_app():
     from app.routes.admin_routes import admin_bp
     from app.routes.satis_tahmini_routes import satis_tahmini_bp
     from app.routes.email_routes import email_bp
+    from app.routes.hubspot_routes import hubspot_bp  # HubSpot blueprint'i ekleyin
 
     app.register_blueprint(product_bp, url_prefix='/products')
     app.register_blueprint(customer_bp, url_prefix='/customers')
@@ -46,5 +47,6 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(satis_tahmini_bp, url_prefix='/sales-forecast')
     app.register_blueprint(email_bp, url_prefix='/emails')
+    app.register_blueprint(hubspot_bp, url_prefix='/hubspot')  # HubSpot blueprint'i ekleyin
 
     return app
