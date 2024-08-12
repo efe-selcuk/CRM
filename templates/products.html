@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ürünler</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h2>Ürünler</h2>
-        <!-- Ürün listeleme bölümü -->
-    </div>
+    <h1>Ürünler</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ad</th>
+                <th>Kategori</th>
+                <th>Fiyat</th>
+                <th>Stok Miktarı</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.ad }}</td>
+                <td>{{ product.kategori.ad if product.kategori else 'Belirtilmemiş' }}</td>
+                <td>{{ product.fiyat }}</td>
+                <td>{{ product.stok_miktari }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Toplam Ürün: {{ total }}</p>
+    <p>Sayfa: {{ page }}</p>
+    <p>Ürünler/Sayfa: {{ per_page }}</p>
 </body>
 </html>

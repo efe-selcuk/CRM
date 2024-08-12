@@ -1,19 +1,56 @@
-<form id="registerForm">
-    <div class="form-group">
-        <label for="isim">İsim:</label>
-        <input type="text" class="form-control" id="isim" placeholder="İsim girin" name="isim" required>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Kayıt Ol</h2>
+        <form id="registerForm" method="POST" action="{{ url_for('auth.register') }}">
+            <div class="form-group">
+                <label for="isim">İsim:</label>
+                <input type="text" class="form-control" id="isim" name="isim" placeholder="İsim girin" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email girin" required>
+            </div>
+            <div class="form-group">
+                <label for="sifre">Şifre:</label>
+                <input type="password" class="form-control" id="sifre" name="sifre" placeholder="Şifre girin" required>
+            </div>
+            <div class="form-group">
+                <label for="rol">Rol:</label>
+                <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol girin" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+        </form>
+        <div id="responseMessage" class="mt-3"></div>
+        <a href="{{ url_for('auth.login') }}">Giriş Yap</a> | <a href="{{ url_for('auth.reset_password') }}">Şifre Sıfırlama</a>
     </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="Email girin" name="email" required>
-    </div>
-    <div class="form-group">
-        <label for="sifre">Şifre:</label>
-        <input type="password" class="form-control" id="sifre" placeholder="Şifre girin" name="sifre" required>
-    </div>
-    <div class="form-group">
-        <label for="rol">Rol:</label>
-        <input type="text" class="form-control" id="rol" placeholder="Rol girin" name="rol" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-</form>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $('#registerForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),  // Form verilerini serialize eder
+                success: function(response) {
+                    $('#responseMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+                },
+                error: function(response) {
+                    $('#responseMessage').html('<div class="alert alert-danger">' + response.responseJSON.message + '</div>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

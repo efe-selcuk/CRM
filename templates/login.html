@@ -28,9 +28,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $('#loginForm').on('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Formun normal şekilde gönderilmesini engeller
             $.ajax({
-                url: '/login',
+                url: '{{ url_for("auth.login") }}', // AJAX isteğini belirtilen URL'ye gönderir
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -39,7 +39,8 @@
                 }),
                 success: function(response) {
                     alert('Giriş başarılı');
-                    // Yönlendirme veya başka bir işlem yapılabilir
+                    // Burada gerekirse yönlendirme yapılabilir
+                    // window.location.href = "some_url"; // Yönlendirme için kullanılabilir
                 },
                 error: function(response) {
                     alert('Giriş hatası: ' + response.responseJSON.message);
